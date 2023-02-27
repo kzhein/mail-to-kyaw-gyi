@@ -21,6 +21,7 @@ exports.handler = async ({ body, httpMethod, headers }, context) => {
       }),
       headers: {
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': 'https://www.kyawzinhein.xyz',
       },
     };
   }
@@ -48,6 +49,7 @@ exports.handler = async ({ body, httpMethod, headers }, context) => {
       }),
       headers: {
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': 'https://www.kyawzinhein.xyz',
       },
     };
   } catch (error) {
@@ -58,6 +60,7 @@ exports.handler = async ({ body, httpMethod, headers }, context) => {
       }),
       headers: {
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': 'https://www.kyawzinhein.xyz',
       },
     };
   }
