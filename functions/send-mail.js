@@ -8,7 +8,11 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-exports.handler = async ({ body, httpMethod }, context) => {
+const rateLimit = require('lambda-rate-limiter')({
+  interval: 60 * 1000, // one minute
+}).check;
+
+exports.handler = async ({ body, httpMethod, headers }, context) => {
   if (httpMethod !== 'POST') {
     return {
       statusCode: 400,
@@ -19,6 +23,12 @@ exports.handler = async ({ body, httpMethod }, context) => {
   }
 
   try {
+    await rateLimit(1, headers['client-ip']).catch(() => {
+      const error = new Error('You can only send 1 email per minute');
+      error.status = 429;
+      throw error;
+    });
+
     const { text } = JSON.parse(body);
 
     await transporter.sendMail({
@@ -36,7 +46,7 @@ exports.handler = async ({ body, httpMethod }, context) => {
     };
   } catch (error) {
     return {
-      statusCode: 500,
+      statusCode: error.status || 500,
       body: JSON.stringify({
         message: error.message,
       }),
