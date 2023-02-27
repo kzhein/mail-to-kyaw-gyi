@@ -19,6 +19,9 @@ exports.handler = async ({ body, httpMethod, headers }, context) => {
       body: JSON.stringify({
         message: 'Please send only POST request!',
       }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     };
   }
 
@@ -43,6 +46,9 @@ exports.handler = async ({ body, httpMethod, headers }, context) => {
       body: JSON.stringify({
         message: 'Mail sent successfully!',
       }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     };
   } catch (error) {
     return {
@@ -50,6 +56,9 @@ exports.handler = async ({ body, httpMethod, headers }, context) => {
       body: JSON.stringify({
         message: error.message,
       }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
     };
   }
 };
