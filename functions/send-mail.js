@@ -13,20 +13,13 @@ const rateLimit = require('lambda-rate-limiter')({
 }).check;
 
 exports.handler = async ({ body, httpMethod, headers }, context) => {
-  if (httpMethod !== 'POST') {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({
-        message: 'Please send only POST request!',
-      }),
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'https://www.kyawzinhein.xyz',
-      },
-    };
-  }
-
   try {
+    if (httpMethod !== 'POST') {
+      const error = new Error('Please only send POST request!');
+      error.status = 400;
+      throw error;
+    }
+
     await rateLimit(1, headers['client-ip']).catch(() => {
       const error = new Error('You can only send 1 email per minute');
       error.status = 429;
