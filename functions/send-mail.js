@@ -15,15 +15,15 @@ const rateLimit = require('lambda-rate-limiter')({
 exports.handler = async ({ body, httpMethod, headers }, context) => {
   try {
     if (httpMethod !== 'POST') {
-      const error = new Error('Please only send POST request!');
-      error.status = 400;
-      throw error;
+      throw Object.assign(new Error('Please only send POST request!'), {
+        status: 400,
+      });
     }
 
     await rateLimit(1, headers['client-ip']).catch(() => {
-      const error = new Error('You can only send 1 email per minute');
-      error.status = 429;
-      throw error;
+      throw Object.assign(new Error('You can only send 1 email per minute'), {
+        status: 429,
+      });
     });
 
     const { text } = JSON.parse(body);
